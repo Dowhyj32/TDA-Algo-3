@@ -1,9 +1,16 @@
-def maxi_subconjunto(matriz, k, sub_conj):
+def maxi_subconjunto(matriz, k, sub_conj, mejor_sum, mejor_sub_conj):
     
     #Caso base
     if len(sub_conj)==k:
-        for ind in sub_conj:
-            
+        suma = 0
+        
+        for i in sub_conj:
+            for j in sub_conj:
+                suma += matriz[i][j]
+        
+        if suma > mejor_sum:
+            mejor_sum = suma
+            mejor_sub_conj = sub_conj[:]
         
     #Paso recursivo
     
@@ -21,5 +28,8 @@ for i in range(n):
 k = int(input('Ingrese el valor de k: '))
 sub_conj = []     #Lista donde voy a ir guardando los posibles indices
 
+mejor_sum = 0
+mejor_sub_conj = []
+
 #LLamada principal
-maxi_subconjunto(matriz, k, sub_conj)    
+maxi_subconjunto(matriz, k, sub_conj, mejor_sum, mejor_sub_conj)    
