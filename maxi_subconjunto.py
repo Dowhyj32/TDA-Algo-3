@@ -1,3 +1,5 @@
+import time
+
 def calcular_valores_maximos(matriz):
     valores = []
     n = len(matriz)
@@ -6,6 +8,43 @@ def calcular_valores_maximos(matriz):
             if i != j:
                 valores.append(matriz[i][j])
     return sorted(valores, reverse=True)
+
+def maxi_subconjunto_sin_poda(matriz, k, sub_conj, start, suma_actual, mejor_sum, mejor_sub_conj):
+    if len(sub_conj) == k:
+        if suma_actual > mejor_sum[0]:
+            mejor_sum[0] = suma_actual
+            mejor_sub_conj[0] = sub_conj[:]
+        return
+        
+    for i in range(start, len(matriz)):
+        nuevo_valor = 0
+        for j in sub_conj:
+            nuevo_valor += matriz[i][j] + matriz[j][i]
+
+        sub_conj.append(i)
+        maxi_subconjunto_sin_poda(matriz, k, sub_conj, i+1, suma_actual + nuevo_valor, mejor_sum, mejor_sub_conj)
+        sub_conj.pop()
+
+def maxi_subconjunto_con_poda(matriz, k, sub_conj, start, suma_actual, mejor_sum, mejor_sub_conj, valores_maximos):
+    faltan = k - len(sub_conj)
+    max_extra = sum(valores_maximos[:faltan*faltan])
+    if suma_actual + max_extra <= mejor_sum[0]:
+        return
+
+    if len(sub_conj) == k:
+        if suma_actual > mejor_sum[0]:
+            mejor_sum[0] = suma_actual
+            mejor_sub_conj[0] = sub_conj[:]
+        return
+
+    for i in range(start, len(matriz)):
+        nuevo_valor = 0
+        for j in sub_conj:
+            nuevo_valor += matriz[i][j] + matriz[j][i]
+
+        sub_conj.append(i)
+        maxi_subconjunto_con_poda(matriz, k, sub_conj, i+1, suma_actual + nuevo_valor, mejor_sum, mejor_sub_conj, valores_maximos)
+        sub_conj.pop()
 
 def maxi_subconjunto(matriz, k, sub_conj, start, suma_actual, mejor_sum, mejor_sub_conj, valores_maximos):
     
@@ -41,15 +80,30 @@ for i in range(n):
     matriz.append(fila)
 
 k = int(input('Ingrese el valor de k: '))
-sub_conj = []     #Lista donde voy a ir guardando los posibles indices
 
-mejor_sum = [0]
-mejor_sub_conj = [[]]
+# SIN PODA
+mejor_sum_sin = [0]
+mejor_subconj_sin = [[]]
+start_time = time.time()
+maxi_subconjunto_sin_poda(matriz, k, [], 0, 0, mejor_sum_sin, mejor_subconj_sin)
+tiempo_sin = time.time() - start_time
 
+# CON PODA
+mejor_sum_con = [0]
+mejor_subconj_con = [[]]
 valores_maximos = calcular_valores_maximos(matriz)
+start_time = time.time()
+maxi_subconjunto_con_poda(matriz, k, [], 0, 0, mejor_sum_con, mejor_subconj_con, valores_maximos)
+tiempo_con = time.time() - start_time
 
-#LLamada principal
-maxi_subconjunto(matriz, k, sub_conj, 0, 0, mejor_sum, mejor_sub_conj, valores_maximos)
 
-print("Mejor subconjunto de índices:", mejor_sub_conj[0])
-print("Suma máxima:", mejor_sum[0])
+# ----------------- RESULTADOS ---------------------
+print("\n----- Resultado SIN Poda -----")
+print("Mejor subconjunto:", mejor_subconj_sin[0])
+print("Suma máxima:", mejor_sum_sin[0])
+print(f"Tiempo de ejecución: {tiempo_sin:.4f} segundos")
+
+print("\n----- Resultado CON Poda -----")
+print("Mejor subconjunto:", mejor_subconj_con[0])
+print("Suma máxima:", mejor_sum_con[0])
+print(f"Tiempo de ejecución: {tiempo_con:.4f} segundos")
