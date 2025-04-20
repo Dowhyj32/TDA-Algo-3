@@ -1,3 +1,6 @@
+# Complejidad temporal: O(3^n)
+# Complejidad espacial: O(n^2)
+
 memo = {}
 
 def at(P, j, c, memo):
