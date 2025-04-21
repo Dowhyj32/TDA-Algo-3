@@ -97,3 +97,4 @@ grafo_sin_ciclo = {
     'C': ['B']
 }
 print(has_cycle(grafo_sin_ciclo))
+
