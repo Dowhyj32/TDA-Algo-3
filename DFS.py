@@ -65,3 +65,35 @@ grafo = {
 }
 print(count_components(grafo)) 
 
+def has_cycle(graph):
+    def dfs_cycle(node, parent, visited):
+        visited.add(node)
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                if dfs_cycle(neighbor, node, visited):
+                    return True
+            elif neighbor != parent:
+                # Encontramos un ciclo
+                return True
+        return False
+
+    visited = set()
+    for node in graph:
+        if node not in visited:
+            if dfs_cycle(node, None, visited):
+                return True
+    return False
+
+grafo_con_ciclo = {
+    'A': ['B', 'C'],
+    'B': ['A', 'C'],
+    'C': ['A', 'B']
+}
+print(has_cycle(grafo_con_ciclo))  
+
+grafo_sin_ciclo = {
+    'A': ['B'],
+    'B': ['A', 'C'],
+    'C': ['B']
+}
+print(has_cycle(grafo_sin_ciclo))
