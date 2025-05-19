@@ -31,4 +31,5 @@ grafo = {
     10: [3]
 }
 
-print(BFS(grafo, 1))
+for i in range(1,len(grafo)+1):
+    print(f'BFS (nodo inicial: {i}): {BFS(grafo, i)}')
