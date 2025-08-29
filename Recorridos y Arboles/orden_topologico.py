@@ -18,7 +18,7 @@ def orden_topologico_dfs(grafo):
     return pila
 
 plan = {
-    'CBC': ['CS Nat','Algebra I', 'Algo I', 'Analisis I'],
+    #'CBC': ['CS Nat','Algebra I', 'Algo I', 'Analisis I'],
     'CS Nat': [],
     'Algebra I': ['Algo II', 'ALC', 'Analisis Avanzado'],
     'Algo I': ['Algo II', 'Labo de datos'],
@@ -35,4 +35,22 @@ plan = {
     'Mod Continuo': []    
 }
 
+grafo = {
+    'm': {'q','r','x'},
+    'n': {'o','q','u'},
+    'o': {'r','s','v'},
+    'p': {'o','s','z'},
+    'q': {'t'},
+    'r': {'u','y'},
+    's': {'r'},
+    't': {},
+    'u': {'t'},
+    'v': {'w','x'},
+    'w': {'z'},
+    'x': {},
+    'y': {'v'},
+    'z': {}
+}
+
 print(f'Posible plan de estudios: {orden_topologico_dfs(plan)}')
+print(f'Posible orden topologico del grafo: {orden_topologico_dfs(grafo)}')
