@@ -32,25 +32,26 @@ print(f'MGN de {a2} = {asteroides_TD(a2)}')
 
 def asteroides_BU(Asteroides): 
     n = len(Asteroides)
-    
-    dp = [[INF]*(n+1) for _ in range(n+1)]
-    dp[0][0] = 0 # 0 días, 0 asteroides -> mgn 0
-    
+    dp_prev = [0]
+        
     for d in range(1, n+1):
         precio = Asteroides[d-1]
+        dp_actual = [INF]*(d+1)
         
-        for a in range(0, d+1):     # a<=d
-            mejor = dp[a][d-1]      # NO operar
+        for a in range(d+1):     
+            mejor = dp_prev[a] if a<=d-1 else INF           # NO operar
             
             if a-1>=0:               # Comprar
-                mejor = max(mejor, dp[a-1][d-1] - precio)
+                mejor = max(mejor, dp_prev[a-1] - precio)
                 
             if a+1<=d-1:            # Vender
-                mejor = max(mejor, dp[a+1][d-1] + precio)
+                mejor = max(mejor, dp_prev[a+1] + precio)
                 
-            dp[a][d] = mejor
+            dp_actual[a] = mejor
+            
+        dp_prev = dp_actual     # La actual pasa a ser la anterior
     
-    return dp[0][n]
+    return dp_prev[0]
 
 a1 = [3, 6, 10]
 a2 = [3, 2, 5, 6]
